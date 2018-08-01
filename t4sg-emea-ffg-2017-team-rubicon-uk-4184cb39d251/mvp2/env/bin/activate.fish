@@ -36,7 +36,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/force/emea-ffg-2017-team-rubicon-uk/mvp2/env"
+set -gx VIRTUAL_ENV "/Users/chrislyon/Downloads/Sponvol/sponvol/t4sg-emea-ffg-2017-team-rubicon-uk-4184cb39d251/mvp2/env"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

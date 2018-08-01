@@ -218,7 +218,7 @@ def add():
             data['createdById'] = session['profile']['id']
 
         spolunteer = get_model().create(data)
-        print('hello there', file=sys.stderr)
+        #print('hello there', file=sys.stderr)
         return redirect(url_for('.index', id=spolunteer['id']))
 
     return render_template("form.html", action="Add", spolunteer={})
@@ -250,7 +250,7 @@ def adminadd():
     data['createdAt'] = 'now'
     data['firstname'] = ''
     spolunteer = get_model().create('Spolunteer', data)
-    print(spolunteer, file=sys.stderr)
+    #print(spolunteer, file=sys.stderr)
     #return render_template("admin.html", action="List", spolunteer={})
     return redirect(url_for('.admin'))
 
@@ -293,7 +293,7 @@ def receptionadd():
     data['createdAt'] = 'now'
     data['firstname'] = ''
     spolunteer = get_model().create('Spolunteer', data)
-    print(spolunteer, file=sys.stderr)
+    #print(spolunteer, file=sys.stderr)
     return redirect(url_for('.reception'))
 
 # [START register]
@@ -317,7 +317,7 @@ def register():
             data['createdById'] = session['profile']['id']
 
         spolunteer = get_model().create('Spolunteer', data)
-        print(spolunteer, file=sys.stderr)
+        #print(spolunteer, file=sys.stderr)
         return redirect(url_for('.profile', id=spolunteer['id']))
 
     return render_template("register.html", action="Add", spolunteer={}, interests=interests)
@@ -397,7 +397,7 @@ def interestadd():
 
     data['createdAt'] = 'now'
     interest = get_model().create('Interest', data)
-    print(interest, file=sys.stderr)
+    #print(interest, file=sys.stderr)
     #return render_template("admin.html", action="List", spolunteer={})
     return redirect(url_for('.admin'))
 
