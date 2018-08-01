@@ -1,0 +1,31 @@
+<script>
+  operation = "Testing";
+</script>
+<div class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a href="/privacyPolicy"><img src="/static/images/TR-Logo2x.png"></a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="/profile">Profile</a></li>
+      <li><a href="/reception?operation={{operation}}">Reception</a></li>
+      <li><a href="/guidance">Guidance</a></li>
+      <li><a href="/training">Training</a></li>
+      <li><a href="/holding">Holding</a></li>
+      <li><a href="/status">Status</a></li>
+      <li><a href="/admin">Admin</a></li>
+      <li><a href="/statistics">Statistics</a></li>
+      <li><a href="/privacyPolicy">Privacy Policy</a></li>
+
+    </ul>
+    {# [START profile] #}
+    <p class="navbar-text navbar-right">
+      {% if session.profile %}
+        <a href="/logout" title="Logout">{% if session.profile.image %}<img style="margin: 0px 6px" class="img-circle" src="{{session.profile.image.url}}" width="24">{% endif %}{{session.profile.displayName}}</a>
+      {% else %}
+        <a href="/oauth2authorize">Login</a>
+      {% endif %}
+    </p>
+    {# [END profile] #}
+  </div>
+</div>

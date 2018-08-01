@@ -1,0 +1,27 @@
+table {
+empty-cells: show;
+}
+
+th, td {
+min-width: 120px;
+}
+
+td input {
+border: none;
+border-width: 0;
+overflow: visible;
+white-space: nowrap;
+box-shadow: none;
+background: transparent;
+display: inline;
+width: 100%;
+box-sizing: border-box;
+-moz-box-sizing: border-box;
+-webkit-box-sizing: border-box;
+}
+
+.table-responsive {
+max-height: 80vh;
+}
+
+

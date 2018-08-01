@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3 style="color:red;">Admin</h3>
+
+<a href="/admin/add" class="btn btn-success btn-sm">
+  <i class="glyphicon glyphicon-plus"></i>
+  Add Spolunteer
+</a>
+
+<a href="/admin/download" class="btn btn-success btn-sm">
+    <i class="glyphicon glyphicon-plus"></i>
+    Download csv
+</a>
+<a href="/admin/purge/Spolunteer" class="btn btn-success btn-sm">
+    <i class="glyphicon glyphicon-plus"></i>
+    Delete all data
+</a>
+<!--button onclick="filter1(this.value)" value="Reception">Reception</button>
+<button onclick="filter1(this.value)" value="Guidance">Guidance</button>
+<button onclick="filter1(this.value)" value="Training">Training</button>
+<button onclick="filter1(this.value)" value="Holding">Holding</button>
+<button onclick="filter1(this.value)" value="Deployed">Deployed</button>
+<button onclick="filter2()">All</button>
+<label><input type='checkbox' id='hide' onclick='handleClick(this);'></label>-->
+<input type="text" id="armbandNumber" onkeyup="armbandSearch()" placeholder="Search for armbands...">
+<div class="table-responsive">
+<table id = "table-spolunteers" class="table table-striped table-hover table-sm" border=1>
+  <thead class="thead-light">
+    <tr>
+        <th> ID </th>
+        <th> Operation </th>
+        <th> Armband Number </th>
+        <th> First Name </th>
+        <th> Last Name </th>
+        <th> Known As </th>
+        <th> Age </th>
+        <th> Gender </th>
+        <th> Email </th>
+        <th> Mobile No. </th>
+        <th> Alternate No.</th>
+        <th> Address </th>
+        <th> City </th>
+        <th> Postcode </th>
+        <th> Next of Kin Name </th>
+        <th> Next of Kin Relationship </th>
+        <th> Next of Kin Phone </th>
+        <th> Outdoor Work </th>
+        <th> Indoor Work </th>
+        <th> Interests </th>
+        <th> Signed In </th>
+        <th> Spolunteer No. </th>
+        <th> Workforce Holding </th>
+        <th> Induction </th>
+        <th> Training </th>
+        <th> Ops/V </th>
+        <th> Comments </th>
+        <th> Strike Team </th>
+        <th> Location/Status </th>
+        <th> Reception Timestamp </th>
+        <th> Delete Spolunteer </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for spolunteer in spolunteers %}
+    <tr id="{{spolunteer.id}}">
+        <td><label class="id">{{spolunteer.id}}</label></td>
+        <td><input type="text" class="operation" value="{{spolunteer.operation}}"/></td>
+        <td><input type="number" class="armbandnumber" value="{{spolunteer.armbandnumber}}"/></td>
+        <td><input type="text" class="firstname" value="{{spolunteer.firstname}}"/></td>
+        <td><input type="text" class="surname" value="{{spolunteer.surname}}"/></td>
+        <td><input type="text" class="knownas" value="{{spolunteer.knownas}}"/></td>
+        <td><input type="number" class="age" value="{{spolunteer.age}}"/></td>
+        <td><input type="text" class="gender" value="{{spolunteer.gender}}"/></td>
+        <td><input type="email" class="emailaddress" value="{{spolunteer.emailaddress}}"/></td>
+        <td><input type="tel" class="mobilephonenumber" value="{{spolunteer.mobilephonenumber}}"/></td>
+        <td><input type="tel" class="alternatephonenumber" value="{{spolunteer.alternatephonenumber}}"/></td>
+        <td><input type="text" class="streetaddress" value="{{spolunteer.streetaddress}}"/></td>
+        <td><input type="text" class="towncity" value="{{spolunteer.towncity}}"/></td>
+        <td><input type="text" class="postcode" value="{{spolunteer.postcode}}"/></td>
+        <td><input type="text" class="nextofkinname" value="{{spolunteer.nextofkinname}}"/></td>
+        <td><input type="text" class="nextofkinrelationship" value="{{spolunteer.nextofkinrelationship}}"/></td>
+        <td><input type="text" class="nextofkinphonenumber" value="{{spolunteer.nextofkinphonenumber}}"/></td>
+        <td><input type="text" class="outdoorwork" value="{{spolunteer.outdoorwork}}"/></td>
+        <td><input type="text" class="indoorwork" value="{{spolunteer.indoorwork}}"/></td>
+        <td><input type="text" class="interests" value="{{spolunteer.interests}}"/></td>
+        <td><input type="text" class="signedin" value="{{spolunteer.signedin}}"/></td>
+        <td><input type="text" class="spolunteernumber" value="{{spolunteer.spolunteernumber}}"/></td>
+        <td><input type="text" class="workforceholding" value="{{spolunteer.workforceholding}}"/></td>
+        <td><input type="text" class="induction" value="{{spolunteer.induction}}"/></td>
+        <td><input type="text" class="trainingandawareness" value="{{spolunteer.trainingandawareness}}"/></td>
+        <td><input type="text" class="opsv" value="{{spolunteer.opsv}}"/></td>
+        <td><input type="text" class="comments" value="{{spolunteer.comments}}"/></td>
+        <td><input type="text" class="locationstatus" value="{{spolunteer.locationstatus}}"/></td>
+        <td><input type="text" class="striketeam" value="{{spolunteer.striketeam}}"/></td>
+        <td><input type="datetime-local" class="receptiontimestamp" value="{{spolunteer.receptiontimestamp}}"/></td>
+        <td>
+          <a href="/user/{{spolunteer.id}}/delete">
+            <img src="/static/images/delete.svg" alt="Delete Spolunteer">
+          </a>
+        </td>
+    </tr>
+    {% else %}
+      <p>No Spolunteers found</p>
+    {% endfor %}
+  </tbody>
+  {% if next_page_token %}
+  <nav>
+  </nav>
+  {% endif %}
+</table>
+</div>
+
+<a href="/interests/add" class="btn btn-success btn-sm">
+  <i class="glyphicon glyphicon-plus"></i>
+  Add Interest
+</a>
+
+<div class="table-responsive">
+  <table id = "table-interest" class="table" border="1">
+    <thead>
+    <tr>
+        <th> ID </th>
+        <th> Interest </th>
+        <th> Delete </th>
+    </tr>
+    </thead>
+    {% for item in interest %}
+    <tbody>
+      <tr id="{{item.id}}">
+        <td><label class="id">{{interest.id}}</label></td>
+        <td><input type="text" class="interest" value="{{item.name}}"/></td>
+        <td><div class="btn-group">
+            <a href="/user/{{item.id}}/delete" class="btn btn-danger btn-xs">
+                <i class="glyphicon glyphicon-delete"></i>X&nbsp;
+            </a>
+        </div></td>
+      </tr>
+    </tbody>
+    {% else %}
+    <p>No Interest found</p>
+    {% endfor %}
+    {% if next_page_token %}
+    <nav>
+    </nav>
+    {% endif %}
+  </table>
+</div>
+
+{% endblock %}
+

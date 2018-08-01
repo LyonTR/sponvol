@@ -1,0 +1,136 @@
+{#
+# Copyright 2015 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#}
+
+{% extends "base.html" %}
+
+{% block content %}
+<h3>{{action}} spolunteer</h3>
+
+<form method="POST" enctype="multipart/form-data">
+
+  <div class="form-group">
+    <label for="firstname">First Name</label>
+    <input type="text" name="firstname" id="firstname" value="{{spolunteer.firstname}}" class="form-control"/>
+  </div>
+
+  <div class="form-group">
+    <label for="surname">Surname</label>
+    <input type="text" name="surname" id="surname" value="{{spolunteer.surname}}" class="form-control"/>
+  </div>
+
+  <div class="form-group">
+    <label for="knownas">Known As</label>
+    <input type="text" name="knownas" id="knownas" value="{{spolunteer.knownas}}" class="form-control"/>
+  </div>
+
+  <div class="form-group">
+    <label for="age">Age</label>
+    <input type="text" name="age" id="age" value="{{spolunteer.age}}" class="form-control"/>
+  </div>
+
+  <div class="form-group">
+    <label for="gender">Gender</label>
+    <input type="text" name="gender" id="gender" value="{{spolunteer.gender}}" class="form-control"/>
+  </div>
+
+  <div class="form-group">
+    <label for="emailaddress">Email Address</label>
+    <input type="text" name="emailaddress" id="emailaddress" value="{{spolunteer.emailaddress}}" class="form-control"/>
+  </div>
+
+  <div class="form-group">
+    <label for="mobilephonenumber">Mobile Phone Number</label>
+    <input type="text" name="mobilephonenumber" id="mobilephonenumber" value="{{spolunteer.mobilephonenumber}}" class="form-control"/>
+  </div>
+    <div class="form-group">
+    <label for="alternatephonenumber">Alternate Phone Number</label>
+    <input type="text" name="alternatephonenumber" id="alternatephonenumber" value="{{spolunteer.alternatephonenumber}}" class="form-control"/>
+  </div>
+    <div class="form-group">
+    <label for="streetaddress">Street Address</label>
+    <input type="text" name="streetaddress" id="streetaddress" value="{{spolunteer.streetaddress}}" class="form-control"/>
+  </div>
+    <div class="form-group">
+    <label for="towncity">Town/City</label>
+    <input type="text" name="towncity" id="towncity" value="{{spolunteer.towncity}}" class="form-control"/>
+  </div>
+    <div class="form-group">
+    <label for="postcode">Postcode</label>
+    <input type="text" name="postcode" id="postcode" value="{{spolunteer.postcode}}" class="form-control"/>
+  </div>
+    <div class="form-group">
+    <label for="emergencycontact">Emergency Contact</label>
+    <input type="text" name="emergencycontact" id="emergencycontact" value="{{spolunteer.emergencycontact}}" class="form-control"/>
+  </div>
+    <div class="form-group">
+    <label for="outdoorwork">Outdoor Work</label>
+    <input type="text" name="outdoorwork" id="outdoorwork" value="{{spolunteer.outdoorwork}}" class="form-control"/>
+  </div>
+    <div class="form-group">
+    <label for="indoorwork">Indoor Woork</label>
+    <input type="text" name="indoorwork" id="indoorwork" value="{{spolunteer.indoorwork}}" class="form-control"/>
+  </div>
+
+  <div class="form-group">
+    <label for="interests">Interests</label>
+    <input type="text" name="interests" id="interests" value="{{spolunteer.interests}}" class="form-control"/>
+  </div>
+
+  <div class="form-group">
+    <label for="signedin">Signed In</label>
+    <input type="text" name="signedin" id="signedin" value="{{spolunteer.signedin}}" class="form-control"/>
+  </div>
+  <div class="form-group">
+    <label for="spolunteernumber">Spolunteer Number</label>
+    <input type="text" name="spolunteernumber" id="spolunteernumber" value="{{spolunteer.spolunteernumber}}" class="form-control"/>
+  </div>
+    <div class="form-group">
+    <label for="workforceholding">Workforce Holding</label>
+    <input type="text" name="workforceholding" id="workforceholding" value="{{spolunteer.workforceholding}}" class="form-control"/>
+  </div>
+   <div class="form-group">
+    <label for="induction">Induction</label>
+    <input type="induction" name="induction" id="induction" value="{{spolunteer.induction}}" class="form-control"/>
+  </div>
+     <div class="form-group">
+    <label for="trainingandawareness">Training and Awareness</label>
+    <input type="trainingandawareness" name="trainingandawareness" id="trainingandawareness" value="{{spolunteer.trainingandawareness}}" class="form-control"/>
+  </div>
+     <div class="form-group">
+    <label for="opsv">Ops/V</label>
+    <input type="opsv" name="opsv" id="opsv" value="{{spolunteer.opsv}}" class="form-control"/>
+  </div>
+       <div class="form-group">
+    <label for="comments">Comments</label>
+    <input type="comments" name="comments" id="comments" value="{{spolunteer.comments}}" class="form-control"/>
+  </div>
+       <div class="form-group">
+    <label for="status">Status</label>
+    <input type="status" name="status" id="status" value="{{spolunteer.status}}" class="form-control"/>
+  </div>
+       <div class="form-group">
+    <label for="striketeam">Strike Team</label>
+    <input type="striketeam" name="striketeam" id="striketeam" value="{{spolunteer.striketeam}}" class="form-control"/>
+  </div>
+        <div class="form-group">
+    <label for="location">Location</label>
+    <input type="location" name="location" id="location" value="{{spolunteer.location}}" class="form-control"/>
+  </div>
+
+  <button type="submit" class="btn btn-success">Save</button>
+</form>
+
+{% endblock %}

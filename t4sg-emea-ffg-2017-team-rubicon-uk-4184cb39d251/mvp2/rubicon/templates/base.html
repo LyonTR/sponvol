@@ -1,0 +1,385 @@
+{#
+# Copyright 2018 Rubicon UK
+#
+#}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Team Rubicon - Spolunteers</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" type ="text/css" href="/static/extra.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+  </head>
+  <body>
+
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm">
+            <a href="/"><img src="/static/images/TR-Logo2x.png" class="img-fluid"></a>
+          </div>
+          {# [START profile] #}
+          <div class="col-md-auto">
+            <p>
+              {% if session.profile %}
+                <a href="/logout" title="Logout">{% if session.profile.image %}<img style="margin: 0px 6px" class="img-circle" src="{{session.profile.image.url}}" width="24">{% endif %}{{session.profile.displayName}}</a>
+              {% else %}
+                <a href="/oauth2authorize">Login</a>
+              {% endif %}
+            </p>
+          </div>
+          {# [END profile] #}
+          <div class="col-md-auto">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                  <a class="nav-item nav-link" href="/profile">Profile</a>
+                  <a class="nav-item nav-link" href="/reception?operation={{operation}}">Reception</a>
+                  <a class="nav-item nav-link" href="/guidance?operation={{operation}}">Guidance</a>
+                  <a class="nav-item nav-link" href="/training?operation={{operation}}">Training</a>
+                  <a class="nav-item nav-link" href="/holding?operation={{operation}}">Holding</a>
+                  <a class="nav-item nav-link" href="/status?operation={{operation}}">Status</a>
+                  <a class="nav-item nav-link" href="/admin">Admin</a>
+                  <a class="nav-item nav-link" href="/statistics">Statistics</a>
+                </div>
+              </div>
+            </nav>
+          </div>
+        </div>
+
+        {% block content %}
+        {% endblock %}
+
+      </div>
+      <script>
+
+      // Loop through all table rows, and hide those who don't match the search query
+      function filter1(value) {
+        var ldivs = document.querySelectorAll(".location");
+        for (var i=0, len=ldivs.length; i < len; i++) {
+          if (ldivs[i].value == value) {
+            ldivs[i].parentNode.parentNode.style.display = "";
+          } else {
+            ldivs[i].parentNode.parentNode.style.display = "none";
+          }
+        }
+      }
+
+      // Loop through all table rows, and unhide all
+      function filter2() {
+        var table = document.getElementById("table-spolunteers");
+        if (table) {
+            var tr = table.getElementsByTagName("tr");
+            for (var i = 0; i < tr.length; i++) {
+              td = tr[i].getElementsByTagName("td")[0];
+              if (td) {
+                  tr[i].style.display = "";
+              }
+            }
+        }
+      }
+
+      // Loop through every cell in table to add events that get triggered:
+      //  a) On entering a cell (focus), the value is recorded (lastValue).
+      //  b) On leaving a cell (blur) the database is updated if cell changed.
+      // If error returned (non 200) then put back last value in cell.
+      blurChange = false;
+      var table = {};
+      table[0] = document.getElementById("table-spolunteers");
+      table[1] = document.getElementById("table-interest");
+      if (table[0]) {
+          table = table[0];
+          tr = table.getElementsByTagName("tr");
+          for (r = 0; r < tr.length; r++) {
+            var td = tr[r].getElementsByTagName("td");
+
+            for (d = 0; d < td.length-1; d++) {
+              //var cell = td[d].getElementsByTagName("div")[0];
+              var cell = td[d].getElementsByTagName("input")[0];
+              //cell.contentEditable = "true";
+              //cell.style.minHeight = "20px";
+
+              if (cell) {
+                  cell.addEventListener("focus", function() {
+                    this.lastValue = this.value;
+
+                    //Set blank timestamp fields to now date on click
+                    if (!this.value && this.className.indexOf("timestamp") !=-1) {
+                      //this.value = new Date(Date.now()).toLocaleString();
+                      this.value = new Date(Date.now()).toISOString().substring(0, 16);
+                    }
+
+                    var rowId = this.parentElement.parentElement.id
+                    var row = this.parentElement.parentElement
+                    var request = new XMLHttpRequest();
+
+                    request.onreadystatechange = function() {
+                      if (this.readyState == 4) {
+                        if (this.status == 200) {
+                          //var row = this.parentElement.parentElement
+                          var r = JSON.parse(this.response);
+                          console.log(this.response);
+                          Object.keys(r).forEach(function(key) {
+                            //row.querySelector('[class=key]').value = this.response[key]
+                            //console.log(row.id);
+                            //console.log("Key:Value " + key + " " + r[key]);
+                            var f = row.querySelector("[class=" + key + "]");
+                            if (f && f.hasOwnProperty("value") && !blurChange) {
+                              console.log(f.value);
+                              //Check if current cell being updated
+                              if (f = cell && cell.className.indexOf("timestamp") !=-1 && cell.value && !r[key]) {
+                                console.log(f.className + " is current thing with value " + f.value);
+                              }
+                              else {
+                                f.value = r[key];
+                              }
+                            }
+                            //console.log("row cell");
+                          });
+                        }
+                        else {
+                          console.log("Error Status: " + this.status);
+                        }
+                      }
+                    };
+                    request.open("GET", "/user/" + rowId, true);
+                    request.send();
+
+                  }, false);
+
+
+                  cell.addEventListener("blur", function() {
+                    if (this.lastValue != this.value) {
+                      var updatedElement = this;
+                      var changedField = this.className;
+                      var changedValue = this.value;
+                      var lastValue = this.lastValue;
+                      var rowId = this.parentElement.parentElement.id
+                      var row = this.parentElement.parentElement
+                      console.log(changedField + " " + lastValue + " :" + rowId);
+
+                      var formData = new FormData();
+                      formData.append(changedField, changedValue);
+                      var operationBox = document.getElementById('operationBox');
+                      if (operationBox) {
+                        formData.append('operation', operationBox.value);
+                      }
+
+                      var request = new XMLHttpRequest();
+
+                      request.onreadystatechange = function() {
+                        if (this.readyState == 4) {
+                          blurChange = false;
+                          if (this.status == 200) {
+                            console.log("Key:Value " + changedField + ":" + changedValue);
+                            console.log("Response: " + this.response);
+
+                            var r = JSON.parse(this.response);
+                            Object.keys(r).forEach(function(key) {
+                              var f = row.querySelector("[class=" + key + "]");
+                              if (f && f.hasOwnProperty("value")) {
+                                f.value = r[key];
+                              }
+                            });
+                          }
+                          else {
+                            console.log("Error Status: " + this.status);
+                            updatedElement.value = lastValue;
+                          }
+                        }
+                      };
+
+                      request.open("PATCH", "/user/" + rowId, true);
+                      request.send(formData);
+                      blurChange = true;
+                    }
+                  }, false);
+               }
+            }
+          }
+      }
+
+      if (table[1]) {
+          table = table[1];
+          tr = table.getElementsByTagName("tr");
+          for (r = 0; r < tr.length; r++) {
+              var td = tr[r].getElementsByTagName("td");
+
+              for (d = 0; d < td.length - 1; d++) {
+                  //var cell = td[d].getElementsByTagName("div")[0];
+                  var cell = td[d].getElementsByTagName("input")[0];
+                  //cell.contentEditable = "true";
+                  //cell.style.minHeight = "20px";
+
+                  if (cell) {
+                      cell.addEventListener("focus", function () {
+                          this.lastValue = this.value;
+
+                          //Set blank timestamp fields to now date on click
+                          if (!this.value && this.className.indexOf("timestamp") != -1) {
+                              //this.value = new Date(Date.now()).toLocaleString();
+                              this.value = new Date(Date.now()).toISOString().substring(0, 16);
+                          }
+
+                          var rowId = this.parentElement.parentElement.id
+                          var row = this.parentElement.parentElement
+                          var request = new XMLHttpRequest();
+
+                          request.onreadystatechange = function () {
+                              if (this.readyState == 4) {
+                                  if (this.status == 200) {
+                                      //var row = this.parentElement.parentElement
+                                      var r = JSON.parse(this.response);
+                                      console.log(this.response);
+                                      Object.keys(r).forEach(function (key) {
+                                          //row.querySelector('[class=key]').value = this.response[key]
+                                          //console.log(row.id);
+                                          //console.log("Key:Value " + key + " " + r[key]);
+                                          var f = row.querySelector("[class=" + key + "]");
+                                          if (f && f.hasOwnProperty("value") && !blurChange) {
+                                              console.log(f.value);
+                                              //Check if current cell being updated
+                                              if (f = cell && cell.className.indexOf("timestamp") != -1 && cell.value && !r[key]) {
+                                                  console.log(f.className + " is current thing with value " + f.value);
+                                              }
+                                              else {
+                                                  f.value = r[key];
+                                              }
+                                          }
+                                          //console.log("row cell");
+                                      });
+                                  }
+                                  else {
+                                      console.log("Error Status: " + this.status);
+                                  }
+                              }
+                          };
+                          request.open("GET", "/user" + rowId, true);
+                          request.send();
+
+                      }, false);
+
+
+                      cell.addEventListener("blur", function () {
+                          if (this.lastValue != this.value) {
+                              var updatedElement = this;
+                              var changedField = this.className;
+                              var changedValue = this.value;
+                              var lastValue = this.lastValue;
+                              var rowId = this.parentElement.parentElement.id
+                              var row = this.parentElement.parentElement
+                              console.log(changedField + " " + lastValue + " :" + rowId);
+
+                              var formData = new FormData();
+                              formData.append(changedField, changedValue);
+                              var operationBox = document.getElementById('operationBox');
+                              if (operationBox) {
+                                  formData.append('operation', operationBox.value);
+                              }
+
+                              var request = new XMLHttpRequest();
+
+                              request.onreadystatechange = function () {
+                                  if (this.readyState == 4) {
+                                      blurChange = false;
+                                      if (this.status == 200) {
+                                          console.log("Key:Value " + changedField + ":" + changedValue);
+                                          console.log("Response: " + this.response);
+
+                                          var r = JSON.parse(this.response);
+                                          Object.keys(r).forEach(function (key) {
+                                              var f = row.querySelector("[class=" + key + "]");
+                                              if (f && f.hasOwnProperty("value")) {
+                                                  f.value = r[key];
+                                              }
+                                          });
+                                      }
+                                      else {
+                                          console.log("Error Status: " + this.status);
+                                          updatedElement.value = lastValue;
+                                      }
+                                  }
+                              };
+
+                              request.open("PATCH", "/user" + "Interest" + "/" + rowId, true);
+                              request.send(formData);
+                              blurChange = true;
+                          }
+                      }, false);
+                  }
+              }
+          }
+      }
+      </script>
+
+
+    {{user}}
+  </body>
+  <script>
+      //If the Operation box is on the screen, then update the links to ?operation=value
+      var operationBox = document.getElementById('operationBox');
+      if (operationBox) {
+        var operationLinks = document.querySelectorAll(".operationLink");
+        operationBox.onchange=operationBox.onkeyup= function() {
+          for (var i=0, len=operationLinks.length; i < len; i++) {
+            operationLinks[i].search= '?operation='+encodeURIComponent(operationBox.value);
+          }
+        }
+      }
+  </script>
+<script> 
+function armbandSearch() {
+  // Declare variables 
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("armbandNumber");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table-spolunteers");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    } 
+  }
+}
+</script>
+
+
+
+<script>
+
+var allName = [];
+var dupicateName = [];
+var test;
+$('tr').each(
+  function(index, tr) {
+  if(index > 0){
+    test = (tr.getElementsByTagName("td")[0].innerHTML);
+    var name = test.substring(50,test.length-2);
+    if(allName.indexOf(name)===-1) {
+      allName.push(name);
+      console.log("Does not exist in array" + name);
+    }else {
+    console.log("Exists in array" + name);
+    tr.getElementsByTagName("td")[0].setAttribute("bgcolor","#FFFF00");
+      dupicateName.push(name);
+    }
+    }
+  }
+);
+
+</script>
+</html>

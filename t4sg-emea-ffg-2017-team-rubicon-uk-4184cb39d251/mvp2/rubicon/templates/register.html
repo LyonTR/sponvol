@@ -1,0 +1,237 @@
+{#
+# Copyright 2015 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#}
+
+{% extends "base.html" %}
+
+{% block content %}
+<h3>{{action}} Spolunteer:</h3>
+
+<form method="POST" enctype="multipart/form-data">
+
+  <h4>About You</h4>
+
+  <div class="form-group row">
+    <label for="firstname" class="col-sm-2 col-form-label">First Name <span style="color:red;">*</span></label>
+    <div class="col-sm-10">
+      <input type="text" name="firstname" id="firstname" placeholder="First Name" 
+      {% if session.profile %}
+        value="{{session.profile.name.givenName}}"
+      {% endif %}
+      class="form-control" required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="surname" class="col-sm-2 col-form-label">Surname <span style="color:red;">*</span></label>
+    <div class="col-sm-10">
+      <input type="text" name="surname" id="surname" placeholder="Surname"
+      {% if session.profile %}
+        value="{{session.profile.name.familyName}}"
+      {% endif %}
+      class="form-control" required>      
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="knownas" class="col-sm-2 col-form-label">Known As <span style="color:red;">*</span></label>
+    <div class="col-sm-10">
+      <input type="text" name="knownas" id="knownas" placeholder="Known As"
+      {% if session.profile %}
+        value="{{session.profile.name.givenName}}"
+      {% endif %}
+      class="form-control" required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="age" class="col-sm-2 col-form-label">Age <span style="color:red;">*</span></label>
+    <div class="col-sm-10">
+      <input type="number" name="age" id="age" placeholder="Age" class="form-control" required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Gender</label>
+    <div class="col-sm-10">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="gender" id="genderMale" value="Male" >
+        <label class="form-check-label" for="genderMale">Male</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="gender" id="genderFemale" value="Female" >
+        <label class="form-check-label" for="genderFemale">Female</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="gender" id="genderNull" value="Prefer not to say">
+        <label class="form-check-label" for="genderNull">Prefer not to say</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="gender" id="genderOther" value="Other" >
+        <input class="form-check-label" for="genderOther" type="text" name="genderNew" id="genderNew" placeholder="Other" onclick="checkOther(this)" oninput="setGender(this)" />
+      </div>
+    </div>
+  </div>
+
+  <h4>Contact Details</h4>
+
+  <div class="form-group row">
+    <label for="emailaddress" class="col-sm-2 col-form-label">Email Address <span style="color:red;">*</span></label>
+    <div class="col-sm-10">
+      <input type="email" name="emailaddress" id="emailaddress" placeholder="Email Address"
+      {% if session.profile %}
+        value="{{session.profile.emails[0].value}}"
+      {% endif %}
+      class="form-control" required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="mobilephonenumber" class="col-sm-2 col-form-label">Mobile Phone Number <span style="color:red;">*</span></label>
+    <div class="col-sm-10">
+      <input type="tel" name="mobilephonenumber" id="mobilephonenumber" placeholder="Mobile Phone Number" class="form-control" required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="alternatephonenumber" class="col-sm-2 col-form-label">Alternate Phone Number</label>
+    <div class="col-sm-10">
+      <input type="tel" name="alternatephonenumber" id="alternatephonenumber" placeholder="Alternate Phone Number" class="form-control">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="streetaddress" class="col-sm-2 col-form-label">Street Address</label>
+    <div class="col-sm-10">
+      <input type="text" name="streetaddress" id="streetaddress" placeholder="Street Address" class="form-control">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="towncity" class="col-sm-2 col-form-label">Town/City</label>
+    <div class="col-sm-10">
+      <input type="text" name="towncity" id="towncity" placeholder="Town/City" class="form-control">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="postcode" class="col-sm-2 col-form-label">Postcode</label>
+    <div class="col-sm-10">
+      <input type="text" name="postcode" id="postcode" placeholder="Postcode" class="form-control">
+    </div>
+  </div>
+
+  <h4>Next of Kin Details</h4>
+
+  <div class="form-group row">
+    <label for="nextofkinname" class="col-sm-2 col-form-label">Name <span style="color:red;">*</span></label>
+    <div class="col-sm-10">
+      <input type="text" name="nextofkinname" id="nextofkinname" placeholder="Name" class="form-control" required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="nextofkinrelationship" class="col-sm-2 col-form-label">Relationship <span style="color:red;">*</span></label>
+    <div class="col-sm-10">
+      <input type="text" name="nextofkinrelationship" id="nextofkinrelationship" placeholder="Relationship" class="form-control" required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="nextofkinphonenumber" class="col-sm-2 col-form-label">Phone Number <span style="color:red;">*</span></label>
+    <div class="col-sm-10">
+      <input type="tel" name="nextofkinphonenumber" id="nextofkinphonenumber" placeholder="Phone Number" class="form-control" required>
+    </div>
+  </div>
+
+  <h4>What you can do</h4>
+
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Outdoor Work <span style="color:red;">*</span></label>
+    <div class="col-sm-10">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="outdoorwork" id="outdoorworkpreferred" value="Preferred">
+        <label class="form-check-label" for="outdoorworkpreferred">Preferred</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="outdoorwork" id="outdoorworkyes" value="Yes" required>
+        <label class="form-check-label" for="outdoorworkyes">Yes</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="outdoorwork" id="outdoorworkno" value="No">
+        <label class="form-check-label" for="outdoorworkno">No</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Indoor Work <span style="color:red;">*</span></label>
+    <div class="col-sm-10">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="indoorwork" id="indoorworkpreferred" value="Preferred">
+        <label class="form-check-label" for="indoorworkpreferred">Preferred</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="indoorwork" id="indoorworkyes" value="Yes" required>
+        <label class="form-check-label" for="indoorworkyes">Yes</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="indoorwork" id="indoorworkno" value="No">
+        <label class="form-check-label" for="indoorworkno">No</label>
+      </div>
+    </div>
+  </div>
+
+  <h4>Interests - Tick all that apply</h4>
+
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label"><span style="color:red;">*</span></label>
+    <div class="col-sm-10">
+      {% for interest in interests %}
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="interest" value="{{interest.name}}" id="{{interest.id}}" onclick="interesting(this)" required>
+          <label class="form-check-label" for="{{interest.id}}">
+            {{interest.name}}
+          </label>
+        </div>
+      {% else %}
+        <p>No Interest found</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <input type="hidden" name="interests" id="interests" value="hello there">
+
+  <button type="submit" class="btn btn-success">Save</button>
+</form>
+<br><br>
+
+<script>
+  function setGender(opt) { document.getElementById("genderOther").value = opt.value; }
+  function checkOther(opt) { document.getElementById("genderOther").checked = "checked"; }
+  function interesting(opt) {
+    skills = document.getElementsByName("interest");
+    hiddenSkill = document.getElementById("interests");
+    skillsArray = [];
+    for (var i = 0; i < skills.length; i++) {
+      if (skills[i].checked) {
+        skillsArray.push(skills[i].value);
+      }
+    }
+    hiddenSkill.value = skillsArray.join(', ');
+  }
+</script>
+
+{% endblock %}

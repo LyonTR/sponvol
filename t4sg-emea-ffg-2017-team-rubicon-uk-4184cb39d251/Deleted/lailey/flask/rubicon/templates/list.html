@@ -1,0 +1,166 @@
+{#
+# Copyright 2015 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#}
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Spolunteers</h3>
+<a href="/spolunteers/add" class="btn btn-success btn-sm">
+  <i class="glyphicon glyphicon-plus"></i>
+  Add spolunteer?
+</a>
+
+
+<button onclick="filter1(this.value)" value = "Registration"  > Registration </button>
+<button onclick="filter1(this.value)" value = "Training" >Training  </button>
+<button onclick="filter1(this.value)" value = "Chilling" >Chilling </button>
+<button onclick="filter1(this.value)" value = "Assignment" >Assignment </button>
+<button onclick="filter1(this.value)" value = "Outside" > Outside </button>
+<button onclick="filter2()" > All </button>
+
+<table id = "myTable" border =1>
+<tr>
+	
+	<th> First Name </th>
+	<th> Last Name </th>
+	<th> Known As </th>
+	<th> Age </th>
+	<th> Gender </th>
+	<th> Email </th>
+	<th> Mobile No. </th>
+	<th> Address </th>
+	<th> City </th>
+	<th> Postcode </th>
+	<th> Emergency Contact </th>
+	<th> Outdoor Work </th>
+	<th> Indoor Work </th>
+	<th> Interests </th>
+	<th> Signed In </th>
+	<th> Spolunteer No. </th>
+	<th> Workforce Holding </th>
+	<th> Induction </th>
+	<th> Training </th>
+	<th> Ops/V </th>
+	<th> Comments </th>
+	<th> Status </th>
+	<th> Strike Team </th>
+	<th> Location </th>
+	<th> Edit Spolunteer </th>
+	<th> Delete Spolunteer </th>
+	
+</th>
+{% for spolunteer in spolunteers %}
+
+<tr>
+
+    <div class="media-body">
+    
+	<td><p>{{spolunteer.firstname}}</p> </td>
+	<td><p>{{spolunteer.surname}}</p> </td>
+	<td><p>{{spolunteer.knownas}}</p> </td>
+	<td><p>{{spolunteer.age}}</p> </td>
+	<td><p>{{spolunteer.gender}}</p> </td>
+	<td><p>{{spolunteer.emailaddress}}</p> </td>
+	<td><p>{{spolunteer.mobilephonenumber}}</p> </td>
+	<td><p>{{spolunteer.streetaddress}}</p> </td>
+	<td><p>{{spolunteer.towncity}}</p> </td>
+	<td><p>{{spolunteer.postcode}}</p> </td>
+	<td><p>{{spolunteer.emergencycontact}}</p> </td>
+	<td><p>{{spolunteer.outdoorwork}}</p> </td>
+	<td><p>{{spolunteer.indoorwork}}</p> </td>
+	<td><p>{{spolunteer.interests}}</p> </td>
+	<td><p>{{spolunteer.signedin}}</p> </td>
+	<td><p>{{spolunteer.spolunteernumber}}</p> </td>
+	<td><p>{{spolunteer.workforceholding}}</p> </td>
+	<td><p>{{spolunteer.induction}}</p> </td>
+	<td><p>{{spolunteer.trainingandawareness}}</p> </td>
+	<td><p>{{spolunteer.opsv}}</p> </td>
+	<td><p>{{spolunteer.comments}}</p> </td>
+	<td><p>{{spolunteer.status}}</p> </td>
+	<td><p>{{spolunteer.striketeam}}</p> </td>
+	<td><p>{{spolunteer.location}}</p> </td>	
+	<td> <div class="btn-group">
+  <a href="/spolunteers/{{spolunteer.id}}/edit" class="btn btn-primary btn-sm">
+    <i class="glyphicon glyphicon-edit"></i>
+    Edit spolunteer
+  </a> </td>
+
+<td> <div class="btn-group">
+  <a href="/spolunteers/{{spolunteer.id}}/delete" class="btn btn-primary btn-sm">
+    <i class="glyphicon glyphicon-edit"></i>
+    Delete spolunteer
+  </a> </td>
+    </div>
+  </a>
+</div>
+</tr>
+{% else %}
+<p>No Spolunteers found</p>
+{% endfor %}
+
+{% if next_page_token %}
+
+
+
+{% endif %}
+</table>
+
+
+<script>
+function filter1(value) {
+  // Declare variables 
+  var  filter, table, tr, td, i;
+  filter = "Registration"
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[23];
+    if (td) {
+      if (td.innerHTML.indexOf(value) > -1) {
+	console.log(value)
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+	console.log(value)
+      }
+    } 
+  }
+}
+
+function filter2() {
+  // Declare variables 
+  var   table, tr, td, i;
+  
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and show
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[23];
+    if (td) {
+        tr[i].style.display = "";
+     
+      }
+    } 
+  }
+
+</script>		
+
+{% endblock %}
+

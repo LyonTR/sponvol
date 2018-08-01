@@ -1,0 +1,12 @@
+Flask==0.10.1
+gunicorn==19.3.0
+google-cloud-datastore==1.5.0
+google-cloud-storage
+six
+google-api-python-client
+oauth2client<4.0dev
+google-api-core<0.2.0dev,>=0.1.1
+google-api-core[grpc]<2.0.0dev,>=1.0.0
+#dicttoxml
+grpcio
+pandas
